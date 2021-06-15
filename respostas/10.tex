@@ -1,0 +1,21 @@
+Prove que o algoritmo $\proc{Talvez-AGM}$ funciona ou mostre um contra-exemplo.
+Justifique.
+
+\begin{codebox}
+    \Procname{$\proc{Talvez-AGM}(G, \omega)$}
+
+    \li \Se $\abs{V[G]} \leq 2$ \Entao \Devolva $G$
+
+    \li seja $V_1$, $V_2$ qualquer partição balanceada de $V[G]$
+    \li seja $G_i$ o subgrafo completo de $G$ contendo apenas os vértices de $V_i$ e \\
+    \qquad todas as arestas de $G$ ligando vértices de $V_i$ para $i=1,2$
+    \li seja $\omega_i$ a restrição de $\omega$ a $G_i$ para $i=1,2$
+
+    \li $T_1 \Recebe \proc{Talvez-AGM}(G_1, \omega_1)$
+    \li $T_2 \Recebe \proc{Talvez-AGM}(G_2, \omega_2)$
+    \li seja $e$ uma aresta de peso mínimo no corte $(V_1, V_2)$ em $G$
+
+    \li \Devolva $T_1 \cup T_2 \cup \set{e}$
+\end{codebox}
+
+\itemdsep

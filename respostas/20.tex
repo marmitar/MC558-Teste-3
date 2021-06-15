@@ -1,0 +1,11 @@
+Dada um grafo $(G, \omega)$, $s, t \in V[G]$ e um valor $k > 0$, mostre como usar Dijkstra para determinar o maior preço entre todos os caminhos de $s$ a $t$ de peso total no máximo $k$. Explique sua ideia sucintamente e escreva um pseudo-código para seu algoritmo. Você não  precisa provar que o algoritmo está correto, mas sua explicação deve ser clara o suficiente para eu me convencer disto. A complexidade do seu algoritmo deve ser $O(V+E + f(V+E))$. Note que você não precisa devolver o caminho, apenas o preço dele.
+
+\begin{enumerate}[label={(\alph*)}]
+    \item Nesta questão, todos os grafos são e devem ser representados por listas de adjacências. Além, não têm arestas de peso negativo.
+
+    \item Você tem à disposição um algoritmo chamado Dijkstra que dado um grafo orientado ponderado $(G, \omega)$ e um vértice $s \in V[G]$, devolve um vetor $d[~]$ indexado por $V[G]$ tal que $d[v] = \mathrm{dist}(s, v)$ para todo $v \in V[G]$. Este algoritmo é dado como uma caixa-preta, i.e., você não sabe como ele é implementado internamente.
+
+    \item Suponha que Dijkstra tem complexidade de tempo $O(f(V+E))$ (uma função de $V$ e $E$). A complexidade exata não é importante, mas deve ser respeitada na solução (veja abaixo).
+\end{enumerate}
+
+\itemdsep
