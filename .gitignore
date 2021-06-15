@@ -6,3 +6,5 @@
 *.pdf
 *.synctex.gz
 .vscode
+__pycache__/
+out/
