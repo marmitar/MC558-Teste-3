@@ -7,6 +7,7 @@ Justifique.
     \li \Se $\abs{V[G]} \leq 2$ \Entao \Devolva $G$
 
     \li seja $V_1$, $V_2$ qualquer partição balanceada de $V[G]$
+        \label{linha:ex1:divisao}
     \li seja $G_i$ o subgrafo completo de $G$ contendo apenas os vértices de $V_i$ e \\
     \qquad todas as arestas de $G$ ligando vértices de $V_i$ para $i=1,2$
     \li seja $\omega_i$ a restrição de $\omega$ a $G_i$ para $i=1,2$
@@ -16,6 +17,20 @@ Justifique.
     \li seja $e$ uma aresta de peso mínimo no corte $(V_1, V_2)$ em $G$
 
     \li \Devolva $T_1 \cup T_2 \cup \set{e}$
+        \label{linha:ex1:combinacao}
 \end{codebox}
 
 \itemdsep
+\newpage
+
+O algoritmo nem sempre é capaz de encontrar uma AG \textbf{mínima}. Como os subgrafos $G_1$ e $G_2$ são arbitrários, mesmo a condição de serem balanceados não é o bastante. É possível que $G_1$ contenha, em um caso extremo, todas as arestas de maior peso do grafo $G$. Nessa situação, a AGM de $G_1$ não seria parte da AGM de $G$, sendo todas suas arestas (já que $G$ é completo) trocadas por arestas do corte $(V_1,V_2)$, em vez de apenas uma aresta de peso mínimo.
+
+\begin{figure}[H]
+    \centering
+    \input{respostas/11}
+
+    \caption{Contra-exemplo para o algoritmo $\proc{Talvez-AGM}$.}
+    \label{fig:ex1}
+\end{figure}
+
+Podemos ver na \cref{fig:ex1} como esse caso pode acontecer em um grafo $G$ completo de $n = 3$ vértices (\cref{fig:ex1:Gexemplo}). Se na etapa de Divisão (\textref{linha:ex1:divisao}{linha #1}) a partição for escolhida como $V_1 = \set{a, b}$ e $V_2 = \set{c}$, que é a balanceada, teremos $G_1$ e $G_2$ como na \cref{fig:ex1:particao}. No entanto, a AGM $T_1 = G_1$ de $G_1$ não faz parte da AGM de $G$, diferentemente do que foi assumido na etapa de Combinação (\textref{linha:ex1:combinacao}{linha #1}). Em uma situação como essa, o resultado de $\proc{Talvez-AGM}$ seria a árvore da \cref{fig:ex1:resultado}, que tem pesos maiores que da \cref{fig:ex1:agminima}.

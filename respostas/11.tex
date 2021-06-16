@@ -1,0 +1,97 @@
+\definecolor{grafo}{rgb}{0.373, 0.522, 0.761}
+\begin{subfigure}[t]{0.48\textwidth}
+    \centering
+
+    \begin{tikzpicture}[
+        scale=0.8, auto, node distance=2 cm and 2cm, on grid,
+        semithick,
+        state/.style={circle, color=white, draw, black, text=black, minimum width =1 cm}
+    ]
+
+        \node[state] (a) {a};
+        \node[state] (b) [below left = of a] {b};
+        \node[state] (c) [below right = of a] {c};
+
+        \path (b) edge node[below, font=\footnotesize] {$\omega(bc) = 1$} (c);
+        \path (a) edge node[above, font=\footnotesize, rotate=-45] {$\omega(ac) = 2$} (c);
+        \path (a) edge node[above, font=\footnotesize, rotate=+45] {$\omega(ab) = 3$} (b);
+
+        \node[draw, shape=ellipse, fit=(a)(b)(c), label={[color=grafo]$G$}, color=grafo] {};
+    \end{tikzpicture}
+
+    \caption{Entrada $G$ com $n = 3$.}
+    \label{fig:ex1:Gexemplo}
+
+\end{subfigure}\hfill%
+\begin{subfigure}[t]{0.48\textwidth}
+    \centering
+
+    \begin{tikzpicture}[
+        auto, node distance=2 cm and 2cm, on grid,
+        semithick,
+        state/.style={circle, color=white, draw, black, text=black, minimum width =1 cm}
+    ]
+
+        \node[state] (a) {a};
+        \node[state] (b) [below left = of a] {b};
+        \node[state] (c) [below right = of a] {c};
+
+        \path (b) edge[opacity=0.2] node[below, font=\small, opacity=0.2] {$1$} (c);
+        \path (a) edge[opacity=0.2] node[above right, font=\small, opacity=0.2] {$2$} (c);
+        \path (a) edge node[above left, font=\small] {$3$} (b);
+
+        \node[draw, shape=ellipse, fit=(a)(b), label={[color=grafo]$G_1$}, color=grafo] {};
+        \node[draw, shape=ellipse, fit=(c), label={[color=grafo]$G_2$}, color=grafo] {};
+    \end{tikzpicture}
+
+    \caption{Possível partição $V_1$, $V_2$ balanceada.}
+    \label{fig:ex1:particao}
+
+\end{subfigure}
+\\[8pt]
+\begin{subfigure}[t]{0.48\textwidth}
+    \centering\captionsetup{justification=centering}
+
+    \begin{tikzpicture}[
+        scale=0.8, auto, node distance=2 cm and 2cm, on grid,
+        semithick,
+        state/.style={circle, color=white, draw, black, text=black, minimum width =1 cm}
+    ]
+
+        \node[state] (a) {a};
+        \node[state] (b) [below left = of a] {b};
+        \node[state] (c) [below right = of a] {c};
+
+        \path (b) edge node[below, font=\small] {$1$} (c);
+        \path (a) edge[opacity=0.2] node[above right, font=\small, opacity=0.2] {$2$} (c);
+        \path (a) edge node[above left, font=\small] {$3$} (b);
+
+    \end{tikzpicture}
+
+    \caption{Resultado (não-mínimo) de $\proc{Talvez-AGM}$, usando a partição proposta.}
+    \label{fig:ex1:resultado}
+
+\end{subfigure}\hfill%
+\begin{subfigure}[t]{0.48\textwidth}
+    \centering
+
+    \begin{tikzpicture}[
+        auto, node distance=2 cm and 2cm, on grid,
+        semithick,
+        state/.style={circle, color=white, draw, black, text=black, minimum width =1 cm}
+    ]
+
+        \node[state] (a) {a};
+        \node[state] (b) [below left = of a] {b};
+        \node[state] (c) [below right = of a] {c};
+
+
+        \path (b) edge node[below, font=\small] {$1$} (c);
+        \path (a) edge node[above right, font=\small] {$2$} (c);
+        \path (a) edge[opacity=0.2] node[above left, font=\small] {$3$} (b);
+    \end{tikzpicture}
+
+    \caption{Árvore Geradora Mínima para $G$.}
+    \label{fig:ex1:agminima}
+
+\end{subfigure}
