@@ -118,8 +118,7 @@ class Node(Generic[K]):
 
 def dijkstra(g: Graph[K], s: K) -> dict[Node[K], float]:
     d = {node: float('+inf') for node in g.nodes}
-    start = g[s]
-    d[start] = 0
+    d[g[s]] = 0
 
     Q = set(g.nodes)
     while Q:
