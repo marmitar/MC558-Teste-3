@@ -135,7 +135,7 @@ def dijkstra(g: Graph[K], s: K) -> dict[Node[K], float]:
     return d
 
 
-exemplo: Graph[str] = Graph(lambda w: w/5)
+exemplo = Graph[str](lambda w: w/5)
 exemplo.edge('s', 'u', 7)
 exemplo.edge('s', 'x', 6)
 exemplo.edge('s', 'p', 5)
