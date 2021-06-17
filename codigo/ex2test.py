@@ -48,8 +48,8 @@ class Test(Graph[Vertex]):
         for i in range(size):
             for j in range(size):
                 if i != j and random() < density:
-                    weight = round(size * random(), 2)
-                    edges.add((i, j, weight))
+                    weight = size * random() * random()
+                    edges.add((i, j, round(weight, 2)))
 
         start, end = randrange(size), randrange(size)
         start, end = min(start, end), max(start, end)
