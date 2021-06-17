@@ -1,7 +1,9 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from random import random, randrange
+from typing import TypedDict
 from ex2lib import Graph, Node, exemplo, K
+from pickle import HIGHEST_PROTOCOL, load, dump
 
 
 
@@ -33,24 +35,75 @@ class Vertex:
         return str(self)
 
 
+class State(TypedDict):
+    size: int
+    start: int
+    edges: set[tuple[int, int, float]]
+
+
 class Test(Graph[Vertex]):
-    def __init__(self, size: int, density: float = 0.5) -> None:
-        super().__init__(default_width=lambda x: (2*x + 1)/size)
+    path = 'test.pickle'
+
+    def __init__(self, size: int, start: int, edges: set[tuple[int, int, float]]) -> None:
+        self.size = size
+        super().__init__(default_width=self._width)
+
+        for i in range(size):
+            self.node(Vertex(i))
+        for i, j, w in edges:
+            self.edge(Vertex(i), Vertex(j), w)
+
+        self.start = Vertex(start)
+
+    def _width(self, weight: float) -> float:
+        return (2 * weight + 1) / self.size
+
+    @staticmethod
+    def randdata(size: int, density: float = 0.5) -> State:
+        edges: set[tuple[int, int, float]] = set()
 
         for i in range(size):
             for j in range(size):
                 if i != j and random() < density:
                     weight = round(size * random(), 2)
-                    self.edge(Vertex(i), Vertex(j), weight)
+                    edges.add((i, j, weight))
 
         start = randrange(size)
-        self.start = Vertex(start)
+        return State(size=size, start=start, edges=edges)
+
+    @classmethod
+    def load(cls, size: int, density: float = 0.5) -> Test:
+        try:
+            with open(cls.path, 'rb') as file:
+                test: Test = load(file)
+            if test.size != size:
+                raise ValueError(test)
+            return test
+
+        except (FileNotFoundError, ValueError):
+            data = cls.randdata(size, density)
+            test = cls(**data)
+            with open(cls.path, 'wb') as file:
+                dump(test, file, HIGHEST_PROTOCOL)
+            return test
+
+    def __getstate__(self) -> State:
+        edges = {(a.name.n, b.name.n, w) for a, b, w in self.edge_weights}
+        return State(size=self.size, start=self.start.n, edges=edges)
+
+    def __setstate__(self, state: State) -> None:
+        self.__init__(**state)
+
+    def render(self, remove: Test.SubSet = set(), mark: Test.SubSet = set()) -> None:
+        return super().render(remove, mark | {self.start})
+
+
+test = Test.load(10, 0.3)
 
 
 if __name__ == "__main__":
     print(maiores_bf(exemplo, 's', 22))
 
-    test = Test(10, 0.3)
     test.render()
     print(test.start)
-    print(maiores_bf(test, test.start, 28))
+    print(maiores_bf(test, test.start, 18))

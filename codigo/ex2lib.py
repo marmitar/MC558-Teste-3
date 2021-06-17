@@ -1,20 +1,25 @@
 from __future__ import annotations
 from math import isfinite
+from random import randrange
 from graphviz import Digraph
 from matplotlib.colors import to_hex, to_rgb
-from typing import Callable, Generic, Hashable, Optional, TypeVar, Union
+from typing import Callable, Container, Generic, Hashable, Literal, Optional, TypeVar, Union
 
 
 BLACK = to_hex(to_rgb('k') + (1.0,), keep_alpha=True)
 GRAY = to_hex(to_rgb('k') + (0.5,), keep_alpha=True)
+RED = '#8c251d'
 
 
 K = TypeVar('K', bound=Hashable)
 Width = Callable[[float], float]
 
+def identity(x: float) -> float:
+    return x
+
 
 class Graph(Generic[K]):
-    def __init__(self, default_width: Width = lambda x: x) -> None:
+    def __init__(self, default_width: Width = identity) -> None:
         self._nodes: dict[K, Node[K]] = {}
         self.default_width = default_width
 
@@ -59,42 +64,41 @@ class Graph(Generic[K]):
         return "{" + ", ".join(nodes) + "}"
 
     def __repr__(self) -> str:
-        return f"Graph({str(self)}"
+        return f"Graph({str(self)})"
 
-    def viz(self, sub: Optional[Graph[K]] = None, width: Optional[Width] = None) -> Digraph:
+    SubSet = Container[Union[K, tuple[K, K]]]
+
+    def viz(self, remove: SubSet = set(), mark: SubSet = set()) -> Digraph:
         dot = Digraph()
-        width = width or self.default_width
 
-        if sub is not None:
-            nodes = sub.nodes
-            edges = sub.edges
-        else:
-            nodes = self.nodes
-            edges = self.edges
-
-        nodes = frozenset(n.name for n in nodes)
-        edges = frozenset((a.name, b.name) for a, b in edges)
+        def color(elem: Union[K, tuple[K, K]]):
+            if elem in remove:
+                return GRAY
+            if elem in mark:
+                return RED
+            else:
+                return BLACK
 
         for node in self.nodes:
-            c = BLACK if node.name in nodes else GRAY
+            c = color(node.name)
             dot.node(str(node), color=c, fontcolor=c)
         for a, b, w in self.edge_weights:
-            c = BLACK if (a.name, b.name) in edges else GRAY
-            dot.edge(str(a), str(b), label=str(w), color=c, fontcolor=c, penwidth=str(width(w)))
+            c = color((a.name, b.name))
+            width = str(self.default_width(w))
+            dot.edge(str(a), str(b), label=str(w), color=c, fontcolor=c, penwidth=width)
         return dot
 
-    def render(self, sub: Optional[Graph[K]] = None, width: Optional[Width] = None) -> None:
-        if width is not None:
-            dot = self.viz(sub, width)
-        else:
-            dot = self.viz(sub)
+    def render(self, remove: SubSet = set(), mark: SubSet = set()) -> None:
+        dot = self.viz(remove, mark)
         dot.render(_gen_name(), 'out', view=True, cleanup=True, quiet_view=True)
 
 
-def _gen_name(cnt: list[int] = [0]) -> str:
-    n = cnt[0]
-    cnt[0] = n + 1
-    return f'graph{n:02d}'
+def _gen_name(cnt: set[int] = set()) -> str:
+    n = randrange(2**30)
+    while n in cnt:
+        n += 1
+    cnt.add(n)
+    return f'graph{n:x}'
 
 
 class Node(Generic[K]):
