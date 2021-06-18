@@ -120,7 +120,11 @@
 \usepackage{tikz}
 \usepackage{caption, subcaption}
 
-\usetikzlibrary{positioning, fit, shapes}
+\usetikzlibrary{positioning, fit, shapes, fadings, calc}
+
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
 
 %%%%%%%%%%%%%%%%
 %% Documentos %%
