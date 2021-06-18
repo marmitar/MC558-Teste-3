@@ -10,31 +10,65 @@ Dada um grafo $(G, \varomega)$, $s, t \in V[G]$ e um valor $k > 0$, mostre como 
 
 \itemdsep
 
-\begin{figure}[H]
-    \centering
-    \input{respostas/21}
+O algoritmo é baseado em três informações:
 
-    \caption{Exemplo do algoritmo $\proc{Maior-Preço}$.}
-    \label{fig:ex2}
-\end{figure}
+% \begin{minipage}{0.5\textwidth}
+%     \begin{figure}[H]
+%         \centering
+%         \input{respostas/21}
 
-\begin{codebox}
-    \Procname{$\proc{Maior-Preço}(G, \varomega, s, t, k)$}
+%         \caption{x}
+%         \label{fig:ex2}
+%     \end{figure}
+% \end{minipage}
 
-    \li $d_s[~] \Recebe \proc{Dijkstra}(G, \varomega, s)$
-    \li \Seja $\varomega^*$ definida por $\varomega^*(u v) = \varomega(v u)$
-    \li $d_t[~] \Recebe \proc{Dijkstra}(G^\intercal, \varomega^*, t)$
-    \li
-    \li $\id{preco} \Recebe -\infty$
-    \li \Para \Cada vértice $u \in V[G]$ \Faca
-        \Do
-    \li     \Para \Cada vértice adjcente $v \in \Adj[u]$ \Faca
+\begin{enumerate}
+    \item Como o preço de um caminho só depende da aresta de maior peso, não é preciso calcular o preço de todos os caminhos. No caso, a solução será apenas o maior peso $\varomega(u, v)$ dentre todas arestas $u v$ que aparecem em um caminho válido (caminhos de $s$ a $t$ com peso total $\leq k$). Isto é:
+    \[
+        \max_{C\text{ é válido}}\set{\text{preço}(C)}
+        = \max_{C\text{ é válido}} \set{\max_{u v \in C}\{\varomega(u, v)\}}
+        = \max_{u v\text{ é parte de um cam. válido}} \set{\varomega(u, v)}
+    \]
+
+    \item Para decidir se uma aresta $u v$ é parte de um caminho válido, basta checar se \\ $\dist(s, u) + \varomega(u, v) + \dist(v, t) \leq k$. Nesse caso, $\dist(s, u) + \varomega(u, v) + \dist(v, t)$ é o peso total do menor caminho de $s$ a $t$ que passa por $u v$. Se esse caminho não for válido, então nenhum outro que passa por $u v$ será e, portanto, $u v$ não deve ser considerada. Caso contrário, temos um caminho válido com $u v$.
+
+    A ideia está exemplificada na \cref{fig:ex2}.
+
+    \item $\dist(s, u)$ pode ser facilmente encontrada com o resultado de $\proc{Dijkstra}$. Para $\dist(v, t)$, no entanto, podemos aplicar o algoritmo de Dijkstra no grafo transposto $G^\intercal$, de modo que o resultado é $\dist_{G^\intercal}(t, v) = \dist_{G}(v, t)$ para todo $v \in V[G] = V[G^\intercal]$. A função $\varomega^*$ associa para cada aresta $v u \in E[G^\intercal]$ o mesmo peso $\varomega$ da aresta equivalente $v u \in E[G]$ no grafo original.
+\end{enumerate}
+
+\begin{minipage}{0.66\textwidth}
+    \begin{codebox}
+        \Procname{$\proc{Maior-Preço}(G, \varomega, s, t, k)$}
+
+        \li $d_s[~] \Recebe \proc{Dijkstra}(G, \varomega, s)$
+        \li \Seja $\varomega^*$ definida por $\varomega^*(u v) = \varomega(v u)$
+        \li $d_t[~] \Recebe \proc{Dijkstra}(G^\intercal, \varomega^*, t)$
+        \li
+        \li $\id{preco} \Recebe -\infty$
+        \li \Para \Cada vértice $u \in V[G]$ \Faca
             \Do
-    \li         \Se $d_s[u] + \varomega(u v) + d_t[v] \leq k$
+        \li     \Para \Cada vértice adjcente $v \in \Adj[u]$ \Faca
                 \Do
-    \li             \Entao $\id{preco} \Recebe \max\{\id{preco}, \varomega(u, v)\}$
+        \li         \Se $d_s[u] + \varomega(u v) + d_t[v] \leq k$
+                    \Do
+        \li             \Entao $\id{preco} \Recebe \max\{\id{preco}, \varomega(u, v)\}$
+                    \End
                 \End
             \End
-        \End
-    \li \Devolva $\id{preco}$
-\end{codebox}
+        \li \Devolva $\id{preco}$
+    \end{codebox}
+\end{minipage}%
+\begin{minipage}{0.28\textwidth}
+    \begin{figure}[H]
+        \centering
+        \input{respostas/21}
+
+        \caption{Menor caminho de $s$ a $t$ que passa pela aresta $u v$.}
+        \label{fig:ex2}
+    \end{figure}
+
+    ~
+\end{minipage}
+
+O pseudo-código assume que $k$ é finito. Caso $k$ possa ser irrestrito, seria necessário checar se $d_s[u] < \infty$ e $d_t[v] < \infty$ para garantir que o caminho $(s, \ldots, u, v, \ldots, t)$ existe.
