@@ -1,7 +1,7 @@
 # MC558 2021s1 - Teste 3
 
 - [Enunciado](enunciado.pdf).
-- ~~Entrega~~.
+- [Entrega](entrega.pdf).
 
 ## Item 1 - *(25 pontos)*
 

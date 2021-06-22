@@ -24,7 +24,7 @@ O algoritmo é baseado em três informações principais:
 
     \item $\dist(s, u)$ é dado diretamente com o resultado de Dijkstra. Para $\dist(v, t)$, no entanto, podemos aplicar o algoritmo novamente, mas no grafo transposto $G^\intercal$, de modo que o resultado é $\dist_{G^\intercal}(t, v) = \dist_{G}(v, t)$ para todo $v \in V[G] = V[G^\intercal]$.
 
-    A função peso $\varomega^*$ de $G^\intercal$ associa para cada aresta transposta $v u \in E[G^\intercal]$ o mesmo peso $\varomega$ da aresta equivalente $u v \in E[G]$ do grafo original.
+    Para chegar nesse resultado, precisamos ainda de uma função peso $\varomega^*$ de $G^\intercal$ que associa para cada aresta transposta $v u \in E[G^\intercal]$ o mesmo peso $\varomega$ da aresta equivalente no grafo original $u v \in E[G]$.
 \end{enumerate}
 
 \begin{codebox}
