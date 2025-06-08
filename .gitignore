@@ -9,3 +9,5 @@
 __pycache__/
 out/
 *.pickle
+!enunciado.pdf
+!entrega.pdf

@@ -1,7 +1,7 @@
-# MC558 2021s1 - Teste 3
+# Análise de Algoritmos II (MC558) - Teste 3
 
-- [Enunciado](enunciado.pdf).
-- [Entrega](entrega.pdf).
+- [Enunciado](./enunciado.pdf)
+- [Entrega](./entrega.pdf)
 
 ## Item 1 - *(25 pontos)*
 
